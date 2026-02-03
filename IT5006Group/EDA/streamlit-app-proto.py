@@ -401,19 +401,19 @@ st.header("Data Preview with Date Range")
 # Assume Date column is already datetime in cached parquet
 min_date, max_date = df_crime["Date"].min().to_pydatetime(), df_crime["Date"].max().to_pydatetime()
 
-date_range = st.slider(
-    "Select date range",
-    min_value=min_date,
-    max_value=max_date,
-    value=(min_date, max_date)
-)
+# date_range = st.slider(
+#     "Select date range",
+#     min_value=min_date,
+#     max_value=max_date,
+#     value=(min_date, max_date)
+# )
 
-filtered_range_df = df_crime[
-    (df_crime["Date"] >= date_range[0]) & (df_crime["Date"] <= date_range[1])
-]
+# filtered_range_df = df_crime[
+#     (df_crime["Date"] >= date_range[0]) & (df_crime["Date"] <= date_range[1])
+# ]
 
-st.write(f"Showing {len(filtered_range_df)} rows between {date_range[0]} and {date_range[1]}:")
-st.dataframe(filtered_range_df.head(50))
+# st.write(f"Showing {len(filtered_range_df)} rows between {date_range[0]} and {date_range[1]}:")
+st.dataframe(df_crime.head(50))
 
 # ===Missing Values===
 st.header("Missing Values by Year")
