@@ -210,14 +210,6 @@ def crime_cases_group(df_main):
     group_year = df_main.groupby("Year").size().reset_index(name="Cases")
     return group_date, group_week, group_month, group_year
 
-with st.sidebar:
-    selected = option_menu(
-        menu_title="IT5003 Group23",
-        options=["Project Data Overview","Visualization","Summary"],
-        icons=["house","bar-chart-line-fill","file-earmark-bar-graph-fill"],
-        menu_icon="cast",
-        default_index=0
-    )
 
 # ==========Retrieving and Processing Data==========
 df_clean = process_crime_data(df_crime)
@@ -389,89 +381,88 @@ fig_crime_pie.update_layout(height=600,width=600)
 
 
 # ========== HOME PAGE ==========
-if selected == "Project Data Overview":
-    st.title("Chicago Crime Dataset - Exploratory Data Analysis")
 
-    st.write("This streamlit application's main objective is to conduct an Exploratory Data Analysis (EDA) on crimes that are occuring "
-    "in Chicago from from 2015 - 2015. The main data is obtained from the open source data provided by Chicago Data Portal.")
-    st.write(f"The dataset contains {df_crime.shape[0]} rows and {df_crime.shape[1]} columns")
-    # ===Dataset Overview===
-    st.header("1. Dataset Overview")
-    
-    # Show column names and data types
-    st.subheader("Column Names and Data Types")
-    st.table(pd.DataFrame({"Column Name": df_crime.columns, "Data Type": df_crime.dtypes.astype(str).values}))
+st.title("Chicago Crime Dataset - Exploratory Data Analysis")
 
-    # ===Data Preview with Date Range Filter===
-    st.header("Data Preview with Date Range")
+st.write("This streamlit application's main objective is to conduct an Exploratory Data Analysis (EDA) on crimes that are occuring "
+"in Chicago from from 2015 - 2015. The main data is obtained from the open source data provided by Chicago Data Portal.")
+st.write(f"The dataset contains {df_crime.shape[0]} rows and {df_crime.shape[1]} columns")
+# ===Dataset Overview===
+st.header("1. Dataset Overview")
 
-    # Assume Date column is already datetime in cached parquet
-    min_date, max_date = df_crime["Date"].min().to_pydatetime(), df_crime["Date"].max().to_pydatetime()
+# Show column names and data types
+st.subheader("Column Names and Data Types")
+st.table(pd.DataFrame({"Column Name": df_crime.columns, "Data Type": df_crime.dtypes.astype(str).values}))
 
-    date_range = st.slider(
-        "Select date range",
-        min_value=min_date,
-        max_value=max_date,
-        value=(min_date, max_date)
+# ===Data Preview with Date Range Filter===
+st.header("Data Preview with Date Range")
+
+# Assume Date column is already datetime in cached parquet
+min_date, max_date = df_crime["Date"].min().to_pydatetime(), df_crime["Date"].max().to_pydatetime()
+
+date_range = st.slider(
+    "Select date range",
+    min_value=min_date,
+    max_value=max_date,
+    value=(min_date, max_date)
+)
+
+filtered_range_df = df_crime[
+    (df_crime["Date"] >= date_range[0]) & (df_crime["Date"] <= date_range[1])
+]
+
+st.write(f"Showing {len(filtered_range_df)} rows between {date_range[0]} and {date_range[1]}:")
+st.dataframe(filtered_range_df.head(50))
+
+# ===Missing Values===
+st.header("Missing Values by Year")
+
+st.write("The following table displays the number of missing values for each column, grouped by year, to understand the trend of missing data " \
+"over different years. It is discovered that the amount of missing data is small compared to the whole dataset which will not distort the overall EDA when removed. " \
+"Also, this simplifies workflow - avoid complexity of imputing values which can introduce bias if not done carefully.")
+
+if "Date" in df_crime.columns:
+    missing_by_year = (
+        df_crime.assign(Year=df_crime["Date"].dt.year)
+        .groupby("Year")
+        .apply(lambda x: x.isnull().sum())
     )
+    #st.write(missing_by_year)
 
-    filtered_range_df = df_crime[
-        (df_crime["Date"] >= date_range[0]) & (df_crime["Date"] <= date_range[1])
-    ]
-
-    st.write(f"Showing {len(filtered_range_df)} rows between {date_range[0]} and {date_range[1]}:")
-    st.dataframe(filtered_range_df.head(50))
-
-    # ===Missing Values===
-    st.header("Missing Values by Year")
-
-    st.write("The following table displays the number of missing values for each column, grouped by year, to understand the trend of missing data " \
-    "over different years. It is discovered that the amount of missing data is small compared to the whole dataset which will not distort the overall EDA when removed. " \
-    "Also, this simplifies workflow - avoid complexity of imputing values which can introduce bias if not done carefully.")
-
-    if "Date" in df_crime.columns:
-        missing_by_year = (
-            df_crime.assign(Year=df_crime["Date"].dt.year)
-            .groupby("Year")
-            .apply(lambda x: x.isnull().sum())
-        )
-        #st.write(missing_by_year)
-
-        fig, ax = plt.subplots(figsize=(10, 6))
-        sns.heatmap(missing_by_year.T, cmap="Reds", annot=True, fmt="d", ax=ax)
-        ax.set_title("Missing Values by Year")
-        st.pyplot(fig)
+    fig, ax = plt.subplots(figsize=(10, 6))
+    sns.heatmap(missing_by_year.T, cmap="Reds", annot=True, fmt="d", ax=ax)
+    ax.set_title("Missing Values by Year")
+    st.pyplot(fig)
 
 # ========== VISUALIZATION PAGE ==========
 
-elif selected == "Visualization":
-
-    # ===== Spatial Analysis =====
-    st.title("🗺️ SPATIAL VISUALIZATION")
-    # Crime Density (crimes/kg2) Choropleth Map of Chicago 
-    st.header("Spatial Analysis: Choropleth")
-    st.plotly_chart(fig_choropleth_overall, use_container_width=True)
 
 
-    # ===== Time Series Analysis =====
-    st.title("⏱️ TIME SERIES VISUALIZATION")
-    
-    st.header("Time Series Analysis: Cases Over Time")
-    st.plotly_chart(fig_crime_cases, use_container_width=True)
-    st.header("Time Series Analysis: Seasonality Trend")
-    st.plotly_chart(fig_time_season, use_container_width=True)
-    
-    # ===== Graph & Plot Analysis =====
-    st.title("📊 GRAPH & PLOT VISUALIZATION")
-    st.header("Graph & Plot: Top 11 Crime Occurence Cummulative Occurence")
-    # st.plotly_chart(fig_top_crime_cum, use_container_width=True)
-    st.header("Graph & Plot: Crime Occurence in Times of Day")
-    st.plotly_chart(fig_crime_prc_bar, use_container_width=True)
-    st.header("Graph & Plot: Crime Occurence Overall Percentage")
-    st.plotly_chart(fig_crime_pie, use_container_width=True)
+# ===== Spatial Analysis =====
+st.title("🗺️ SPATIAL VISUALIZATION")
+# Crime Density (crimes/kg2) Choropleth Map of Chicago 
+st.header("Spatial Analysis: Choropleth")
+st.plotly_chart(fig_choropleth_overall, use_container_width=True)
 
 
-# ========== SUMMARY PAGE ==========
-else:
-    st.title(f"Summary page is still empty 🙂, be patient")
+# ===== Time Series Analysis =====
+st.title("⏱️ TIME SERIES VISUALIZATION")
+
+st.header("Time Series Analysis: Cases Over Time")
+st.plotly_chart(fig_crime_cases, use_container_width=True)
+st.header("Time Series Analysis: Seasonality Trend")
+st.plotly_chart(fig_time_season, use_container_width=True)
+
+# ===== Graph & Plot Analysis =====
+st.title("📊 GRAPH & PLOT VISUALIZATION")
+st.header("Graph & Plot: Top 11 Crime Occurence Cummulative Occurence")
+# st.plotly_chart(fig_top_crime_cum, use_container_width=True)
+st.header("Graph & Plot: Crime Occurence in Times of Day")
+st.plotly_chart(fig_crime_prc_bar, use_container_width=True)
+st.header("Graph & Plot: Crime Occurence Overall Percentage")
+st.plotly_chart(fig_crime_pie, use_container_width=True)
+
+
+
+st.title(f"Summary page is still empty 🙂, be patient")
 
