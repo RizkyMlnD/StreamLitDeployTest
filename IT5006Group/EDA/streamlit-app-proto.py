@@ -278,22 +278,6 @@ fig_crime_cases.update_layout(
 )
 
 
-# --- Crime Density Map ---
-fig_density = px.density_mapbox(
-    df_clean,
-    lat="Latitude",
-    lon="Longitude",
-    radius=10,
-    hover_data=["Year", "Date"],
-    color_continuous_scale="Viridis",
-    mapbox_style="open-street-map",
-    zoom=9,   # higher zoom = closer view
-    center={"lat": 41.8781, "lon": -87.6298},  # Chicago coordinates
-    height=600,
-    title="Incident Density Map - Chicago Focus",
-    animation_frame="Year"   # optional: play by year
-)
-
 # ---Choropleth Map Figure Preparation---
 geojson = json.loads(gdf.copy().to_json())
 fig_choropleth_overall = px.choropleth_mapbox(
@@ -318,22 +302,22 @@ fig_choropleth_overall = px.choropleth_mapbox(
 )
 
 # ---Top Crime Horizontal Bar---
-fig_top_crime_cum = px.bar(
-    df_top_crime,
-    x="Cummulative Count",
-    y="Primary Type",
-    animation_frame="Year",
-    orientation="h",
-    title="Cummulative Count for Chicago Crime Based on Type (Yearly, Top 11)",
-)
-fig_top_crime_cum.update_layout(
-    xaxis_title="Crime Count",
-    yaxis_title="Crime Type",
-    height=800,
-    width=1000
-)
-fig_top_crime_cum.update_xaxes(tickformat=",d")
-fig_top_crime_cum.update_yaxes(categoryorder="total ascending")
+# fig_top_crime_cum = px.bar(
+#     df_top_crime,
+#     x="Cummulative Count",
+#     y="Primary Type",
+#     animation_frame="Year",
+#     orientation="h",
+#     title="Cummulative Count for Chicago Crime Based on Type (Yearly, Top 11)",
+# )
+# fig_top_crime_cum.update_layout(
+#     xaxis_title="Crime Count",
+#     yaxis_title="Crime Type",
+#     height=800,
+#     width=1000
+# )
+# fig_top_crime_cum.update_xaxes(tickformat=",d")
+# fig_top_crime_cum.update_yaxes(categoryorder="total ascending")
 
 # --- Crime Time of Day Percentage Occurence Bar ---
 fig_crime_prc_bar = px.bar(
@@ -468,8 +452,6 @@ elif selected == "Visualization":
     st.header("Spatial Analysis: Choropleth")
     st.plotly_chart(fig_choropleth_overall, use_container_width=True)
 
-    st.header("Spatial Analysis: Density Map")
-    st.plotly_chart(fig_density, use_container_width=True)
 
     # ===== Time Series Analysis =====
     st.title("⏱️ TIME SERIES VISUALIZATION")
@@ -482,7 +464,7 @@ elif selected == "Visualization":
     # ===== Graph & Plot Analysis =====
     st.title("📊 GRAPH & PLOT VISUALIZATION")
     st.header("Graph & Plot: Top 11 Crime Occurence Cummulative Occurence")
-    st.plotly_chart(fig_top_crime_cum, use_container_width=True)
+    # st.plotly_chart(fig_top_crime_cum, use_container_width=True)
     st.header("Graph & Plot: Crime Occurence in Times of Day")
     st.plotly_chart(fig_crime_prc_bar, use_container_width=True)
     st.header("Graph & Plot: Crime Occurence Overall Percentage")
