@@ -271,22 +271,6 @@ fig_crime_cases.update_layout(
 )
 
 
-# --- Crime Density Map ---
-fig_density = px.density_mapbox(
-    df_clean,
-    lat="Latitude",
-    lon="Longitude",
-    radius=10,
-    hover_data=["Year", "Date"],
-    color_continuous_scale="Viridis",
-    mapbox_style="open-street-map",
-    zoom=9,   # higher zoom = closer view
-    center={"lat": 41.8781, "lon": -87.6298},  # Chicago coordinates
-    height=600,
-    title="Incident Density Map - Chicago Focus",
-    animation_frame="Year"   # optional: play by year
-)
-
 # ---Choropleth Map Figure Preparation---
 geojson = json.loads(gdf.copy().to_json())
 fig_choropleth_overall = px.choropleth_mapbox(
@@ -460,8 +444,6 @@ st.title("🗺️ SPATIAL VISUALIZATION")
 st.header("Spatial Analysis: Choropleth")
 st.plotly_chart(fig_choropleth_overall, use_container_width=True)
 
-st.header("Spatial Analysis: Density Map")
-st.plotly_chart(fig_density, use_container_width=True)
 
 # ===== Time Series Analysis =====
 st.title("⏱️ TIME SERIES VISUALIZATION")
