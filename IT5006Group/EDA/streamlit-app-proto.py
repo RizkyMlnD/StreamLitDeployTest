@@ -17,6 +17,8 @@ DATASET_ID = 'it5006chicagocrimeparquet'
 FILE_LIST = ["ChicagoCrimes(20152025).parquet","ChicagoCommunityArea.parquet"]
 
 
+
+
 @st.cache_data
 def get_data_kaggle_crime(file_id):
     df = kagglehub.load_dataset(
@@ -26,21 +28,25 @@ def get_data_kaggle_crime(file_id):
         )
     return df
 
-if os.path.exists(FILE_LIST[0]):
+
+if os.path.exists("CrimeCut.parquet"):
     # Load from local Parquet cache
-    df_crime = pd.read_parquet(FILE_LIST[0])
-    st.success(f"{FILE_LIST[0]} Loaded {len(df_crime):,} rows from local cache!")
+    df_crime = pd.read_parquet("CrimeCut.parquet")
+    st.success(f"{"CrimeCut.parquet"} Loaded {len(df_crime):,} rows from local cache!")
     if st.button("🔄 Refresh from Kaggle"):
-        os.remove(FILE_LIST[0])
-        if os.path.exists(FILE_LIST[0]):
-            os.remove(FILE_LIST[0])
+        os.remove("CrimeCut.parquet")
+        if os.path.exists("CrimeCut.parquet"):
+            os.remove("CrimeCut.parquet")
         st.rerun()
 else:
     # Download and convert one time only
     with st.spinner("Downloading dataset from Kaggle... this may take a minute."):
-        df_crime = get_data_kaggle_crime(FILE_LIST[0])
-        st.success(f"✅ {FILE_LIST[0] }Downloaded , and cached locally!")
-
+        # Load the latest version
+        df_crime = kagglehub.load_dataset(
+        KaggleDatasetAdapter.PANDAS,
+        "rkyz801/crimecuttest",
+        "CrimeCut.parquet",
+        )
 
 if os.path.exists(FILE_LIST[1]):
     # Load from local Parquet cache
@@ -55,7 +61,7 @@ else:
     # Download and convert one time only
     with st.spinner("Downloading dataset from Kaggle... this may take a minute."):
         df_polygon = get_data_kaggle_crime(FILE_LIST[1])
-        st.success(f"✅ {FILE_LIST[1] }Downloaded, and cached locally!")
+
 
 @st.cache_data
 def process_crime_data(df_main):
@@ -66,8 +72,7 @@ def process_crime_data(df_main):
     df_main['Month'] = df_main['Datetime'].dt.month
     df_main['Year'] = df_main['Datetime'].dt.year
     # Convert specific object, int64, and float64 columns to category
-    cols_to_convert = ["IUCR", "Primary Type", "Description", "Beat", "District", "Ward", "Community Area", "FBI Code"]
-    df_main[cols_to_convert] = df_main[cols_to_convert].astype("category")
+
     return df_main
 
 
