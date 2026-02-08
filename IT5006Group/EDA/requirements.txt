@@ -1,17 +1,2 @@
 streamlit
-
-pandas
-numpy
-
-seaborn
-matplotlib
-plotly
-
-streamlit-option-menu
-
-geopandas
-shapely
-pyproj
-fiona
-kagglehub
 plotly.io
