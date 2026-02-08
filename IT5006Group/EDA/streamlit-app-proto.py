@@ -2,12 +2,14 @@ import streamlit as st
 import plotly.io as pio
 import gdown
 import os
+from PIL import Image
 
 gdrive_dict = {'area_crimetype_heatmap.json':'1TJiv9xgoa6Kaut-Oi8vL8-T2lngMB6zi',
                'diurnal_heatmap.json':'1RsLPtfXTXiMNHRWcYpHqN45MpPCfXPpD',
                'crime_choropleth_map.json':'10zDHrCXcWuwe8MtW1ctKf5FPtNS1hLTp',
                'time_series_seasonality.json':'1l5-chpbi_n3J8yAUytzF8mJD5jqshURA',
-               'top_crime_annual.json':'1nV7WUgQHpmK-DGagmm5sGc5bOnFFeyco'}
+               'top_crime_annual.json':'1nV7WUgQHpmK-DGagmm5sGc5bOnFFeyco',
+               'arrest_rate.png':'1U6JqhoYsaPMThrGGLOm3zpOH2swAk4oI'}
 
 file_name = list(gdrive_dict.keys())
 
@@ -16,24 +18,22 @@ if st.button("Reload charts"):
     st.cache_data.clear()
 
 @st.cache_data
-def get_data_from_gdrive(file_id, file_name):
-
-    url = f"https://drive.google.com/uc?export=download&id={file_id}"
-
-    gdown.download(url, file_name, quiet=False, fuzzy=True)
-
-    json_file = pio.read_json(file_name)
-
-    return json_file
-
-
 def check_file(file_id,file_name):
-    if os.path.exists(file_name):
-        json_file = pio.read_json(file_name)
-    else:
-        json_file = get_data_from_gdrive(file_id,file_name)
-    return json_file
+    file_type = file_name.split('.')[1]
 
+    if os.path.exists(file_name):
+        pass
+    else:
+        url = f"https://drive.google.com/uc?export=download&id={file_id}"
+
+        gdown.download(url, file_name, quiet=False)
+        
+    if file_type == 'json':
+        file_read = pio.read_json(file_name)
+    else:
+        file_read = Image.open(file_name)
+
+    return file_read
 
 
 fig_heatmap_area_crime = check_file(gdrive_dict[file_name[0]],file_name[0])
@@ -41,7 +41,7 @@ fig_heatmap_diurnal = check_file(gdrive_dict[file_name[1]],file_name[1])
 fig_choropleth = check_file(gdrive_dict[file_name[2]],file_name[2])
 fig_time_series = check_file(gdrive_dict[file_name[3]],file_name[3])
 fig_top_crime = check_file(gdrive_dict[file_name[4]],file_name[4])
-
+fig_arrest_rate = check_file(gdrive_dict[file_name[5]],file_name[5])
 
 # ========== MAIN PAGE ==========
 
@@ -63,7 +63,8 @@ st.plotly_chart(fig_heatmap_area_crime, use_container_width=True)
 st.header("Heatmap of Diurnal Crime Occurence")
 st.plotly_chart(fig_heatmap_diurnal, use_container_width=True)
 
-
+st.header("Crime Arrest Rate")
+st.image(fig_arrest_rate)
 # ========== SUMMARY PAGE ==========
 
 st.title(f"Summary page is still empty 🙂, be patient")
