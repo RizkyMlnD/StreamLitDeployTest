@@ -5,5 +5,7 @@ matplotlib
 gdown
 plotly
 geopandas
-plotly.io
+shapely
+pyproj
+datetime
 Pillow
