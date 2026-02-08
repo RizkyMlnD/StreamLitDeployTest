@@ -44,28 +44,50 @@ fig_top_crime = check_file(gdrive_dict[file_name[4]],file_name[4])
 fig_arrest_rate = check_file(gdrive_dict[file_name[5]],file_name[5])
 
 # ========== MAIN PAGE ==========
-
-st.title("Chicago Crime Dataset - Exploratory Data Analysis")
-
+st.title("📊 IT5006 Group 23 - Chicago Crime")
+st.write("An exploratory data analysis was conducted towards Chicago's Crime dataset (2015-2025) provided by the open-source Chicago Data Portal. " \
+"In this analysis, the team's main focus is to gain insights of how crimes behave in Chicago. The insights that the team would try to uncover are where crimes occur, " \
+"what types of crime occur, and when do they happen.")
 
 st.header("Crime Density Choropleth Map of Chicago")
+st.write("A choropleth map of Chicago's crime density (crime/km²) is plotted to visualize the spatial distribution." \
+"By adjusting the year filter, it is apparent that areas with initially high crime density continue to experience more crime than lower-density areas in the following years. The **central and near-shore areas of Chicago have consistent high crime density**.")
 st.plotly_chart(fig_choropleth, width='stretch')
 
 st.header("Crime Occurence Time Series Seasonality")
+st.write("When plotted into a time series, it can be seen that crime occurence have a seasonality pattern. The most notable seasonality pattern is when the crime " \
+"occurence is plotted by Months. Crimes are at their lowest during the **first few months of the year**  and it gradually increases toward the middle of the year, **peaking in July and August most of the time**. Finally, it continues to decrease by the end of" \
+" the year and the pattern continues for the following years.")
 st.plotly_chart(fig_time_series, width='stretch')
 
 st.header("Highest Crime in Chicago Annually")
+st.write("There are many crime classifications from the dataset and to identify each crime type will become troublesome since some can be classified as noise if it does not bring any value into the EDA. To ensure that " \
+"the crime types are consistent, the crime types are ranked and the top 10 is the main focus of the EDA. It appears that the crime types are consistent throughout the years " \
+"with **Theft, Battery, and Criminal Damage** ranking the highest while **others remain in the top 10 but interchange in ranking**.")
 st.plotly_chart(fig_top_crime, width='stretch')
 
-st.header("Heatmap of Chicago Community Area Crime Occurence")
+st.header("Crime Heatmap of Chicago Community Area")
+st.write("To understand the amount of crimes that happened in each Chicago Community area, a heatmap was made. Although it only covers the top 10 community area with the highest crime occurence, "
+"it still provides a guidance for the EDA. For example:")
+st.markdown("&nbsp;&nbsp;&nbsp;&nbsp;• Theft frequently occurs in Austin, Near North Side, Near West Side, Loop, and West Town")
+st.markdown("&nbsp;&nbsp;&nbsp;&nbsp;• Battery usually happens in Austin, South Shore North Lawndale, and Humboldt Park") 
+st.markdown("&nbsp;&nbsp;&nbsp;&nbsp;• Narcotic crimes are highest in North Lawndale and Humboldt Park.")
+st.write("This suggests that **certain crime types are more prevalent in some areas more than others**.")
 st.plotly_chart(fig_heatmap_area_crime, width='stretch')
 
 st.header("Heatmap of Diurnal Crime Occurence")
+st.write("The following heatmap provides information how crime types are distributed throughout the times of day and the days of week. From the heatmap, " \
+"it is understood that crime rates vary by type depending on the time of day. For example, deceptive crimes usually occur in the middle of the afternoon while criminal " \
+"damage usually happens from the evening until midnight.")
 st.plotly_chart(fig_heatmap_diurnal, width='stretch')
 
 st.header("Crime Arrest Rate")
+st.write("With the amount of crimes that are happening in Chicago, it is important to understand if the crimes are handled properly. Unfortunately, it was " \
+"discovered that the arrest rate for the top 10 most occuring crime are in the lower ranks based on the following bar chart. This signifies the importance " \
+"of estimating and predicting where and when crimes can happen. This will change how crime policing can transform from a reactive approach to a preventive approach.")
 st.image(fig_arrest_rate)
 # ========== SUMMARY PAGE ==========
 
-st.title(f"Summary page is still empty 🙂, be patient")
+st.title(f"📄Summary page")
+st.write("Still empty 🙂, be patient")
 
