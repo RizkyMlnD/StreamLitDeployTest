@@ -5,6 +5,5 @@ matplotlib
 gdown
 plotly
 geopandas
-shapely
 plotly.io
 Pillow
