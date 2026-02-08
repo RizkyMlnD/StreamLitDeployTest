@@ -1,15 +1,16 @@
 import streamlit as st
 import plotly.io as pio
+import pathlib
+
+# Path relative to this script
+HERE = pathlib.Path(__file__).parent
 
 
-
-
-
-fig_heatmap_area_crime = pio.read_json("../jsonvis/area_crimetype_heatmap.json")
-fig_heatmap_diurnal = pio.read_json("../jsonvis/diurnal_heatmap.json")
-fig_choropleth = pio.read_json("../jsonvis/crime_choropleth_map.json")
-fig_time_series = pio.read_json("../jsonvis/time_series_seasonality.json")
-fig_top_crime = pio.read_json("../jsonvis/top_crime_annual.json")
+fig_heatmap_area_crime = pio.read_json(HERE / "jsonvis" / "area_crimetype_heatmap.json")
+fig_heatmap_diurnal = pio.read_json(HERE / "jsonvis" / "diurnal_heatmap.json")
+fig_choropleth = pio.read_json(HERE / "jsonvis" / "crime_choropleth_map.json")
+fig_time_series = pio.read_json(HERE / "jsonvis" / "time_series_seasonality.json")
+fig_top_crime = pio.read_json(HERE / "jsonvis" / "top_crime_annual.json")
 
 # ========== MAIN PAGE ==========
 
