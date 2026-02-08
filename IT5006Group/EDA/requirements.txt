@@ -6,7 +6,5 @@ gdown
 plotly
 geopandas
 shapely
-pyproj
-datetime
 plotly.io
 Pillow
