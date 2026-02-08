@@ -1,2 +1,8 @@
 # Ignore everything inside ProjectData
 ProjectData/*
+jsonvis/*
+top_crime_annual.json
+diurnal_heatmap.json
+crime_choropleth_map.json
+area_crimetype_heatmap.json
+time_series_seasonality.json

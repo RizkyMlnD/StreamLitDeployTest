@@ -10,6 +10,8 @@ gdrive_dict = {'area_crimetype_heatmap.json':'1TJiv9xgoa6Kaut-Oi8vL8-T2lngMB6zi'
                'top_crime_annual.json':'1nV7WUgQHpmK-DGagmm5sGc5bOnFFeyco'}
 
 file_name = list(gdrive_dict.keys())
+
+file_name = list(gdrive_dict.keys())
 if st.button("Reload charts"):
     st.cache_data.clear()
 
@@ -34,8 +36,8 @@ def check_file(file_id,file_name):
 
 
 
-fig_heatmap_area_crime = get_data_from_gdrive(gdrive_dict[file_name[0]],file_name[0])
-fig_heatmap_diurnal = get_data_from_gdrive(gdrive_dict[file_name[1]],file_name[1])
+fig_heatmap_area_crime = check_file(gdrive_dict[file_name[0]],file_name[0])
+fig_heatmap_diurnal = check_file(gdrive_dict[file_name[1]],file_name[1])
 fig_choropleth = check_file(gdrive_dict[file_name[2]],file_name[2])
 fig_time_series = check_file(gdrive_dict[file_name[3]],file_name[3])
 fig_top_crime = check_file(gdrive_dict[file_name[4]],file_name[4])
@@ -49,17 +51,17 @@ st.title("Chicago Crime Dataset - Exploratory Data Analysis")
 st.header("Crime Density Choropleth Map of Chicago")
 st.plotly_chart(fig_choropleth, use_container_width=True)
 
-st.header("Highest Crime in Chicago Annually")
-st.plotly_chart(fig_top_crime, use_container_width=True)
-
 st.header("Crime Occurence Time Series Seasonality")
 st.plotly_chart(fig_time_series, use_container_width=True)
 
+st.header("Highest Crime in Chicago Annually")
+st.plotly_chart(fig_top_crime, use_container_width=True)
+
 st.header("Heatmap of Chicago Community Area Crime Occurence")
-st.plotly_chart(fig_heatmap_area_crime, use_container_width=False)
+st.plotly_chart(fig_heatmap_area_crime, use_container_width=True)
 
 st.header("Heatmap of Diurnal Crime Occurence")
-st.plotly_chart(fig_heatmap_diurnal, use_container_width=False)
+st.plotly_chart(fig_heatmap_diurnal, use_container_width=True)
 
 
 # ========== SUMMARY PAGE ==========
