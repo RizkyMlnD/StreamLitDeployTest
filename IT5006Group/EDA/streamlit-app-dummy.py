@@ -18,7 +18,7 @@ gdrive_dict = {'area_crimetype_heatmap.json':'1TJiv9xgoa6Kaut-Oi8vL8-T2lngMB6zi'
 # fig_heatmap_area_crime = check_file(gdrive_dict[file_name[0]],file_name[0])
 
 
-fig = pio.read_json("../jsonvis/treemap.json")
+fig = pio.read_json("../jsonvis/treemap_crime.json")
 fig.show()
 
 # ========== MAIN PAGE ==========
